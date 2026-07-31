@@ -17,7 +17,18 @@ COLUMNAS = [
     "Ganancias netas",
 ]
 
-PATRON_DINERO = re.compile(r"-?\d[\d.,]*\s*MXN", re.IGNORECASE)
+PATRON_DINERO_TEXTO = (
+    r"(?:"
+    r"-?\s*MXN\s*\d[\d.,]*"
+    r"|MXN\s*-\s*\d[\d.,]*"
+    r"|-?\s*\d[\d.,]*\s*MXN"
+    r")"
+)
+
+PATRON_DINERO = re.compile(
+    PATRON_DINERO_TEXTO,
+    re.IGNORECASE,
+)
 
 
 def convertir_mxn_a_numero(texto):
@@ -108,7 +119,7 @@ def parsear_fila(texto):
 def extraer_candidatos_dom(pagina):
     script = """
     () => {
-        const moneyRegex = /-?\\d[\\d.,]*\\s*MXN/g;
+        const moneyRegex = /__PATRON_DINERO__/gi;
 
         function isVisible(el) {
             const style = window.getComputedStyle(el);
@@ -184,6 +195,11 @@ def extraer_candidatos_dom(pagina):
         return candidates.sort((a, b) => a.y - b.y);
     }
     """
+
+    script = script.replace(
+        "__PATRON_DINERO__",
+        PATRON_DINERO_TEXTO,
+    )
 
     return pagina.evaluate(script)
 

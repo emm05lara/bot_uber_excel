@@ -1,6 +1,6 @@
 # Solución de problemas
 
-Este documento cubre situaciones frecuentes. Ninguna de las indicaciones aquí implica cambios en el código de `extraer_uber.py` o `login_uber.py`.
+Este documento cubre situaciones frecuentes. Salvo que se indique explícitamente lo contrario, ninguna de las indicaciones aquí implica cambios en el código de `extraer_uber.py` o `login_uber.py`.
 
 Cuando una causa u solución no ha sido verificada directamente en este proyecto, se marca explícitamente como **hipótesis**.
 
@@ -49,6 +49,25 @@ Si el script se ejecuta pero reporta "0 filas detectadas en esta vista":
 - Revisa el archivo `debug_candidatos_<fecha>.txt` generado en `salidas/`; ahí se listan los elementos que el script sí consideró como candidatos, aunque no hayan pasado el filtro final de una fila válida.
 - Revisa la captura de pantalla (`captura_<fecha>.png`) generada en el mismo momento, para comparar visualmente qué estaba en pantalla.
 - Confirma que la tabla tenga filas con exactamente 5 montos visibles (Ganancias totales, Reembolsos y gastos, Ajustes, Pago, Ganancias netas); es el criterio que usa el script para reconocer una fila real.
+
+## Se genera la captura, pero se detectan cero filas
+
+Síntoma:
+
+- Uber está visible y la tabla de Ganancias tiene datos;
+- la captura de pantalla se genera correctamente;
+- la terminal muestra "Filas detectadas en esta vista: 0" de forma consistente, incluso con la tabla bien cargada.
+
+Causa histórica:
+
+- algunas variantes de la interfaz de Uber muestran el código de moneda antes del importe (por ejemplo `MXN 1,696.32` o `MXN -1,184.55`), en lugar de después (`1,696.32 MXN`);
+- versiones anteriores de `extraer_uber.py` solo reconocían correctamente el formato con `MXN` después del importe, por lo que ninguna fila alcanzaba las 5 cantidades requeridas y el análisis monetario las descartaba todas.
+
+Verificación:
+
+- confirma que estás usando una versión de `extraer_uber.py` que incluye la corrección para formatos monetarios con `MXN` como prefijo o sufijo (incluyendo cantidades negativas);
+- ejecuta las pruebas automáticas de regresión: `python -m unittest discover -s tests -v`;
+- no publiques ni compartas el archivo de debug generado (`debug_candidatos_<fecha>.txt`) para diagnosticar este caso, porque puede contener nombres de conductores y montos reales (ver [`SEGURIDAD_Y_PRIVACIDAD.md`](SEGURIDAD_Y_PRIVACIDAD.md)).
 
 ## La interfaz de Uber cambió
 
