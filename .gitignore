@@ -1,0 +1,40 @@
+# Perfil local persistente de Chromium
+# Contiene datos de sesión y navegación; nunca debe subirse al repositorio.
+/perfil_uber/
+
+# Archivos generados por el programa (Excel, debug, capturas)
+# Pueden contener nombres de conductores y datos financieros reales.
+/salidas/*
+!/salidas/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Variables y archivos locales
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y archivos temporales
+*.log
+*.tmp
+*.temp

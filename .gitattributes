@@ -1,0 +1,8 @@
+# Normaliza los finales de línea de archivos de texto.
+# No reformatea el contenido existente; solo aplica a futuros commits
+# y a la normalización de línea que Git realiza al confirmar cambios.
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.bat text eol=crlf
